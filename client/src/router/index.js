@@ -4,6 +4,10 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 const routes = [
 	{
+		path: '/',
+		redirect: '/userMgt'
+	}, 
+	{
 		path: '/userMgt',
 		component: () => import('../views/common/layout/layout.vue'),
 		children: [{

@@ -3,9 +3,54 @@
     <el-header>
       <div class="sys_title">zkg98管理系统</div>
     </el-header>
-    <el-container>
-      <el-aside :width="isCollapse ? '' : '200px'">
+    <el-container :class="device === 'mobile' ? 'mobile_container' : ''">
+      <el-menu
+        v-if="device === 'mobile'"
+        mode="horizontal"
+        :default-active="$route.path"
+        class="el-menu-demo"
+        @open="handleOpen"
+        @close="handleClose"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        router
+        :collapse="isCollapse"
+      >
+        <div class="collapse" @click="changeCollapse" v-if="device === 'pc'">
+          | | |
+        </div>
+        <template v-for="item in menuList">
+          <template v-if="item.children && item.children[0]">
+            <el-submenu
+              :index="item.path"
+              background-color="#3d7dbd"
+              :key="item.id"
+            >
+              <template slot="title">
+                <i :class="item.icon"></i>
+                <span slot="title">{{ item.name }}</span>
+              </template>
+              <el-menu-item
+                v-for="(subItem, i) in item.children"
+                :key="i"
+                :index="subItem.path"
+              >
+                {{ subItem.name }}
+              </el-menu-item>
+            </el-submenu>
+          </template>
+          <template v-else>
+            <el-menu-item :index="item.path" :key="item.id">
+              <i :class="item.icon"></i>
+              <span slot="title">{{ item.name }}</span>
+            </el-menu-item>
+          </template>
+        </template>
+      </el-menu>
+      <el-aside :width="isCollapse ? '' : '200px'" v-if="device === 'pc'">
         <el-menu
+          mode="vertical"
           :default-active="$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
@@ -54,10 +99,15 @@
 </template>
 
 <script>
+import { getDeviceType } from "../../../utils/getDeviceType";
+import { mapState, mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapState(["device"]),
+    ...mapState(["isCollapse"]),
+  },
   data() {
     return {
-      isCollapse: false,
       menuList: [
         {
           id: "1",
@@ -92,8 +142,19 @@ export default {
       ],
     };
   },
-  created() {},
+  created() {
+    // console.log(11111, navigator);
+    let self = this;
+    this.getDeviceType();
+    window.onresize = function () {
+      self.getDeviceType();
+    };
+  },
   methods: {
+    getDeviceType() {
+      let device = getDeviceType();
+      this.$store.commit("setDevice", device);
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -108,7 +169,7 @@ export default {
       // });
     },
     changeCollapse() {
-      this.isCollapse = !this.isCollapse;
+      this.$store.commit("setIsCollapse", !this.isCollapse);
     },
   },
 };
@@ -154,5 +215,16 @@ export default {
 }
 .sys_title {
   font-size: 24px;
+}
+
+.mobile_container {
+  display: flex;
+  flex-direction: column;
+  .el-menu--horizontal > .el-menu-item {
+    border-bottom: none;
+  }
+  .el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom: none;
+  }
 }
 </style>

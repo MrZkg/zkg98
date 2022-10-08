@@ -1,0 +1,124 @@
+/*----弹性盒布局------ */
+
+.k-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.k-flex-row {
+  flex-direction: row;
+}
+
+.k-flex-col {
+  flex-direction: column;
+}
+
+/* 垂直居中 */
+.k-col-center {
+  align-items: center;
+}
+
+/* 顶部对齐 */
+.k-col-top {
+  align-items: flex-start;
+}
+
+/* 底部对齐 */
+.k-col-bottom {
+  align-items: flex-end;
+}
+
+/* 左边对齐 */
+.k-row-left {
+  justify-content: flex-start;
+}
+
+/* 水平居中 */
+.k-row-center {
+  justify-content: center;
+}
+
+/* 右边对齐 */
+.k-row-right {
+  justify-content: flex-end;
+}
+
+/* 水平两端对齐，项目之间的间隔都相等 */
+.k-row-between {
+  justify-content: space-between;
+}
+
+/* 水平每个项目两侧的间隔相等，所以项目之间的间隔比项目与父元素两边的间隔大一倍 */
+.k-row-around {
+  justify-content: space-around;
+}
+
+// 2. 子元素是否换行
+/* 换行 */
+.k-flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* 不换行 */
+.k-flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+// 4. 子元素空间分布
+.k-flex-1 {
+  flex: 1;
+}
+
+.k-flex-2 {
+  flex: 2;
+}
+
+.k-flex-3 {
+  flex: 3;
+}
+
+/* ...... */
+.k-flex-12 {
+  flex: 12;
+}
+
+
+/*----------- 文字对齐 ----------------*/
+/* 文字左对齐 */
+.k-text-left {
+  text-align: left;
+}
+
+/* 文字居中对齐 */
+.k-text-center {
+  text-align: center;
+}
+
+/* 文字右对齐 */
+.k-text-right {
+  text-align: right;
+}
+
+/*---------------- 文字省略 -------------*/
+.k-line-1 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.k-line-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.k-line-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

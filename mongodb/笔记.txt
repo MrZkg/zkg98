@@ -1,0 +1,2 @@
+配置环境变量
+mongo --dbpath 数据库路径  --port 端口

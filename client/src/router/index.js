@@ -5,12 +5,18 @@ Vue.use(VueRouter)
 const routes = [
 	{
 		path: '/',
-		redirect: '/userMgt'
+		redirect: '/index'
 	}, 
 	{
-		path: '/userMgt',
+		path: '/index',
 		component: () => import('../views/common/layout/layout.vue'),
 		children: [{
+			path: '/',
+			component: () => import('../views/index/index.vue'),
+			meta: {
+				title: '首页'
+			}
+		}, {
 			path: '/',
 			component: () => import('../views/userMgt/userMgt.vue'),
 			meta: {

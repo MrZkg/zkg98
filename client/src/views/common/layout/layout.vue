@@ -58,6 +58,7 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
+          :collapse-transition="false"
           router
           :collapse="isCollapse"
         >

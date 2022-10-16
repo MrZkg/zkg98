@@ -12,7 +12,7 @@ import '@/assets/styles/index.scss'
 import axios from './config/http'; // 导入http中创建的axios实例
 Vue.prototype.$axios = axios
 import './api/index.js' // 引入api接口 $api
-
+import './filters/index.js' //引入自定义filter
 
 
 import ELEMENT from 'element-ui'

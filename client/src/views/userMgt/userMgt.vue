@@ -28,7 +28,7 @@
         <el-table :data="dataList" border>
           <el-table-column label="序号" fixed width="60" align="center">
             <template slot-scope="scope">
-              <div>{{ scope.$index }}</div>
+              <span>{{ (cur_page - 1) * pageSize + scope.$index }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -44,6 +44,9 @@
             show-overflow-tooltip
             align="center"
           >
+            <template slot-scope="scope">
+              <span>{{ scope.row.sex | enumSex }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="age"
@@ -74,27 +77,36 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="pagination">
+        <div
+          class="pagination"
+          :class="device === 'pc' ? 'k-flex k-row-right' : ''"
+        >
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+            :current-page="cur_page"
+            :page-sizes="[5, 10, 20, 40]"
+            :page-size="pageSize"
+            :layout="
+              device === 'mobile'
+                ? 'total, prev, next,jumper'
+                : 'total, sizes, prev, pager, next, jumper'
+            "
+            :total="paging.totalCount"
           >
           </el-pagination>
         </div>
       </div>
     </el-card>
     <el-dialog
+      :width="device === 'mobile' ? '90%' : '50%'"
       :title="modifyForm.id ? '编辑' : '新增'"
       :visible.sync="modifyDialog"
       top="5vh"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       center
+      @close="modifyDialogClose"
     >
       <el-form
         :model="modifyForm"
@@ -103,22 +115,23 @@
         label-width="6em"
         class="modifyForm"
       >
-        <el-form-item label="姓名" prop="">
+        <el-form-item label="姓名" prop="name">
           <el-input
             type="text"
             placeholder="请输入姓名"
             v-model="modifyForm.name"
-            maxlength="50"
+            maxlength="5"
+            show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="">
+        <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="modifyForm.sex">
             <el-radio-button label="1">男</el-radio-button>
             <el-radio-button label="0">女</el-radio-button>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="年龄" prop="">
+        <el-form-item label="年龄" prop="age">
           <el-input-number v-model="modifyForm.age" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
@@ -141,19 +154,47 @@
         >
       </div>
     </el-dialog>
-    <!-- @closed="modifyFormClosed"
-      @open="modifyFormOpen" -->
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
+
 export default {
+  computed: {
+    ...mapState(["device"]),
+    ...mapState(["isCollapse"]),
+  },
   data() {
     return {
       isDisable: false,
-      currentPage: 1,
+      pageSize: 10,
+      cur_page: 1,
+      paging: {},
       ruleForm: {},
-      rules: {},
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "请输入姓名",
+            trigger: "blur",
+          },
+        ],
+        sex: [
+          {
+            required: true,
+            message: "请选择性别",
+            trigger: "blur",
+          },
+        ],
+        age: [
+          {
+            required: true,
+            message: "请输入年龄",
+            trigger: "blur",
+          },
+        ],
+      },
       dataList: [],
       modifyDialog: false,
       modifyForm: {
@@ -195,6 +236,12 @@ export default {
     findUsers() {
       this.$api.findUsers().then((res) => {
         this.dataList = res.data;
+        this.paging = {
+          pageSize: 10,
+          currPage: 1,
+          totalpages: 1,
+          totalCount: res.data.length,
+        };
       });
     },
     modifyFormSubmit(formName) {
@@ -223,15 +270,30 @@ export default {
     },
     // 删除
     handleDel(row) {
-      let tData = {
-        name: row.name,
+      this.$confirm("确认删除该用户, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        let tData = {
+          name: row.name,
+        };
+        this.isDisable = true;
+        this.$api.deleteUser(tData).then((res) => {
+          this.$message.success(res.msg);
+          this.findUsers();
+          this.isDisable = false;
+        });
+      }).catch(()=> {});
+    },
+    modifyDialogClose() {
+      console.log(22222);
+      this.modifyForm = {
+        id: "",
+        name: "",
+        sex: 1,
+        age: 0,
       };
-      this.isDisable = true;
-      this.$api.deleteUser(tData).then((res) => {
-        this.$message.success(res.msg);
-        this.findUsers();
-        this.isDisable = false;
-      });
     },
   },
 };
@@ -239,9 +301,6 @@ export default {
 
 <style lang="scss" scoped>
 .pagination {
-	padding-top: 20px;
-	display: flex;
-	justify-content: end;
-
+  padding-top: 20px;
 }
 </style>

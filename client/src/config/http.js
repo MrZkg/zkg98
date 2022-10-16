@@ -54,14 +54,20 @@ import router from '../router'
 
 // )
 
-// axios.interceptors.request.use(
-// 	function (config) {
-// 		return config
-// 	},
-// 	function (err) {
-// 		Promise.reject(err)
-// 	})
+// request拦截器
+const NODE_ENV = process.env.NODE_ENV
+const BASE_API = NODE_ENV === 'development' ? '/api' : '' //http://120.46.129.54:80/
+axios.interceptors.request.use((config) => {
+	// 需要在请求发出前做的全局处理逻辑可以添加在这里
+	config.url = BASE_API + config.url;
+	return config;
+}, (error) => {
+	// 可以在这里统一处理请求错误
+	Promise.reject(error);
+});
 // // 响应的拦截
+console.log(1111111111, process.env.NODE_ENV)
+// const 
 axios.interceptors.response.use(
 	function (res) {
 		// console.log(2222,res)

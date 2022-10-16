@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { getDeviceType } from "../../../utils/getDeviceType";
+// import { getDeviceType } from "../../../utils/getDeviceType";
 import { mapState, mapGetters } from "vuex";
 export default {
   computed: {
@@ -145,11 +145,11 @@ export default {
   },
   created() {
     // console.log(11111, navigator);
-    let self = this;
-    this.getDeviceType();
-    window.onresize = function () {
-      self.getDeviceType();
-    };
+    // let self = this;
+    // this.getDeviceType();
+    // window.onresize = function () {
+    //   self.getDeviceType();
+    // };
   },
   methods: {
     getDeviceType() {

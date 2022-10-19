@@ -3,29 +3,29 @@
  */
 import Vue from 'vue'
 import axios from '@/config/http'; // 导入http中创建的axios实例
-// 用户信息
-const userInfo = function () {
-	return axios.get('/zkg98/userInfo')
-}
-// 添加用户
-const addUsers = function (params) {
-	return axios.post('/zkg98/addUsers', params)
-}
+
+/**
+ * /zkg98  是给nginx 做代理加的一层路由
+ */
 const findUsers = function (params) {
-	return axios.post('/zkg98/findUsers', params)
+	return axios.post('/users/findUsers', params)
+}
+const addUsers = function (params) {
+	return axios.post('/users/addUsers', params)
 }
 const deleteUser = function (params) {
-	return axios.post('/zkg98/deleteUser', params)
+	return axios.post('/users/deleteUser', params)
 }
 const updateUser = function (params) {
-	return axios.post('/zkg98/updateUser', params)
+	return axios.post('/users/updateUser', params)
 }
+
+
 const api = {
-	userInfo,
-	addUsers,
 	findUsers,
+	addUsers,
 	deleteUser,
-	updateUser
+	updateUser,
 }
 
 Vue.prototype.$api = api

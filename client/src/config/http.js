@@ -56,7 +56,9 @@ import router from '../router'
 
 // request拦截器
 const NODE_ENV = process.env.NODE_ENV
-const BASE_API = NODE_ENV === 'development' ? '/api' : '' //http://120.46.129.54:80/
+// 走nginx代理时要加 /zkg98
+const BASE_API = NODE_ENV === 'development' ? '/api/zkg98' : '/zkg98' //http://120.46.129.54:80/   
+// /api  是本地开发的代理依据    /zkg98 是服务器nginx的代理
 axios.interceptors.request.use((config) => {
 	// 需要在请求发出前做的全局处理逻辑可以添加在这里
 	config.url = BASE_API + config.url;

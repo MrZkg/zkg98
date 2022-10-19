@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/zkg98');
 // { usemongoclient: true }
 
 mongoose.connection.once("open", function () {
@@ -16,6 +16,14 @@ mongoose.connection.once("close", function () {
 
 
 
+// let data = async function (Model, params) {
+// 	return new Promise(function (resolve, reject) {
+// 		Model.create(params, function (err, results) {
+// 			if (err) reject(err)
+// 			else resolve(results)
+// 		})
+// 	})
+// }
 
 /*
 增create
@@ -28,6 +36,9 @@ module.exports.create = async (Model, params) => {
 		})
 	})
 }
+// module.exports.create = async (Model, params) => {
+// 	return data(Model, params)
+// }
 /*
 查find
 */

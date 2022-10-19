@@ -207,6 +207,7 @@ export default {
   },
   created() {
     this.findUsers();
+
   },
   methods: {
     handleSizeChange(val) {
@@ -268,26 +269,31 @@ export default {
       };
       this.modifyDialog = true;
     },
-    // 删除
+    // 删除事件
     handleDel(row) {
       this.$confirm("确认删除该用户, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
-        let tData = {
-          name: row.name,
-        };
-        this.isDisable = true;
-        this.$api.deleteUser(tData).then((res) => {
-          this.$message.success(res.msg);
-          this.findUsers();
-          this.isDisable = false;
-        });
-      }).catch(()=> {});
+      })
+        .then(() => {
+          let tData = {
+            name: row.name,
+          };
+          this.delUser(tData);
+        })
+        .catch(() => {});
+    },
+    // 删除
+    delUser(tData) {
+      this.isDisable = true;
+      this.$api.deleteUser(tData).then((res) => {
+        this.$message.success(res.msg);
+        this.findUsers();
+        this.isDisable = false;
+      });
     },
     modifyDialogClose() {
-      console.log(22222);
       this.modifyForm = {
         id: "",
         name: "",
